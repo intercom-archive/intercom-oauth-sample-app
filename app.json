@@ -1,0 +1,28 @@
+{
+  "name": "Intercom - Oauth App Example",
+  "description": "An example app using Intercom's OAuth",
+  "repository": "https://github.com/thewheat/intercom-oauth-samle-app",
+  "keywords": ["intercom", "oauth"],
+  "env": {
+    "client_id": {
+      "required": true,
+      "description": "Client id provided on https://app.intercom.io/a/apps/qji82zks/settings/oauth"
+    },
+    "client_secret": {
+      "required": true,
+      "description": "Client secret provided on https://app.intercom.io/a/apps/qji82zks/settings/oauth"
+    },
+    "self_ssl": {
+      "required": false,
+      "description": "Set to 1 only if you want to use your own files for certificates"
+    },
+    "redirect_url": {
+      "required": false,
+      "description": "If you have multiple `redirect_url`s specified you can use this to specify which one to use (by default Intercom will use the first one)"
+    },
+    "PORT": {
+      "required": false,
+      "description": "The port you wish to host this on"
+    }
+  }
+}
