@@ -86,5 +86,22 @@
 <img src=<%= @avatar %> alt="Avatar" style="width:10%">
 
 
+<h1 class="center"><%= "Counts endpoint via the Ruby library" %></h1>
+<table>
+  <tr>
+    <th>Count Type</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Users</td>
+    <td><%= @counts.user["count"] %></td>
+  </tr>
+  <tr>
+    <td>Leads</td>
+    <td><%= @counts.lead["count"] %></td>
+  </tr>
+  </tr>
+</table>
+
 </body>
 </html>

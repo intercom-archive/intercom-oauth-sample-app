@@ -5,10 +5,10 @@
 
 require 'sinatra'
 require 'thin'
-require 'json'
 require "net/http"
 require "uri"
 require 'intercom'
+require 'json'
 require 'cgi'
 require 'dotenv'
 Dotenv.load
@@ -32,6 +32,7 @@ configure do
     set :port, ENV["PORT"]
   end
   set :server, "thin"
+  set :show_exceptions, :after_handler # show errors http://www.sinatrarb.com/intro.html#Error
   enable :sessions
   if ENV["self_ssl"].to_i == 1 then
     # Create SSL these cert files via: 
@@ -48,6 +49,7 @@ configure do
 	  end
   end
 end
+
 get '/' do
   session[:state] = session[:state] || gen_state
   erb :intercom_button, :locals => {:client_id => ENV["client_id"],
@@ -56,6 +58,9 @@ get '/' do
 end
 
 get '/home' do
+
+  # Manual request via the API
+
   uri = URI.parse("https://api.intercom.io/me")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
@@ -63,15 +68,15 @@ get '/home' do
   request.add_field("Accept", "application/json")
   puts request
   puts "TOKEN #{session[:token]}"
-begin
-  request.basic_auth(CGI.unescape(session[:token]), "")
-  response = http.request(request)
-  rsp = JSON.parse(response.body)
-rescue Exception => e
-  puts e.message
-  puts e.backtrace.inspect
-  raise 'EXCEPTION'
-end
+  begin
+    request.basic_auth(CGI.unescape(session[:token]), "")
+    response = http.request(request)
+    rsp = JSON.parse(response.body)
+  rescue Exception => e
+    puts e.message
+    puts e.backtrace.inspect
+    raise 'EXCEPTION'
+  end
 
   @name = rsp["name"]
   @type = rsp["type"]
@@ -82,6 +87,11 @@ end
   @app_create_date = rsp["app"]["created_at"]
   @app_secure_mode = rsp["app"]["secure"]
   @avatar = rsp["avatar"]["image_url"]
+
+  # Request via Intercom Ruby library
+  intercom = Intercom::Client.new(token: session[:token])
+  @counts = intercom.counts.for_app
+  puts "Counts: #{@counts.inspect}"
 
   erb :greeting
 end
