@@ -35,7 +35,7 @@ configure do
   set :show_exceptions, :after_handler # show errors http://www.sinatrarb.com/intro.html#Error
   enable :sessions
   if ENV["self_ssl"].to_i == 1 then
-    # Create SSL these cert files via: 
+    # Create SSL these cert files via:
     # openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout pkey.pem -out cert.crt
 	  class << settings
 	    def server_settings
@@ -85,7 +85,7 @@ get '/home' do
   @app_type = rsp["app"]["type"]
   @app_code = rsp["app"]["id_code"]
   @app_create_date = rsp["app"]["created_at"]
-  @app_secure_mode = rsp["app"]["secure"]
+  @app_identity_verification = rsp["app"]["identity_verification"]
   @avatar = rsp["avatar"]["image_url"]
 
   # Request via Intercom Ruby library
